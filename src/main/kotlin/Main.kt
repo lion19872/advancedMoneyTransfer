@@ -8,7 +8,7 @@ fun main() {
 }
 
 fun readCardType(): String {
-    println("Введите тип карты/счета (Mastercard, Maestro, Visa, Мир, VK Рау):")
+    println("Введите тип карты/счета (Mastercard, Maestro, Visa, Мир, VK Pay):")
     return readLine()!!.trim()
 }
 
@@ -22,19 +22,19 @@ fun readTransferAmount(): Double {
     return readLine()!!.toDouble()
 }
 
-fun calculateCommission(cardType: String = "VK Рау", totalPreviousTransfers: Double = 0.0, transferAmount: Double): Double {
+fun calculateCommission(cardType: String = "VK Pay", totalPreviousTransfers: Double = 0.0, transferAmount: Double): Double {
     val maxDailyTransferAmount = 150000.0
     val maxMonthlyTransferAmount = 600000.0
     val vkPayMaxSingleTransferAmount = 15000.0
     val vkPayMaxMonthlyTransferAmount = 40000.0
 
-    if (cardType == "VK Рау") {
-        if (transferAmount <= vkPayMaxSingleTransferAmount &&
+    if (cardType == "VK Pay") {
+        return if (transferAmount <= vkPayMaxSingleTransferAmount &&
             totalPreviousTransfers + transferAmount <= vkPayMaxMonthlyTransferAmount
         ) {
-            return 0.0
+            0.0
         } else {
-            return transferAmount * 0.0075 // 0.75% для переводов на счет VK Рау
+            transferAmount * 0.0075 // 0.75% для переводов на счет VK Pay
         }
     } else {
         val monthlyTransferLimitReached = totalPreviousTransfers + transferAmount > maxMonthlyTransferAmount
@@ -49,14 +49,14 @@ fun calculateCommission(cardType: String = "VK Рау", totalPreviousTransfers: 
 
         when (cardType) {
             "Mastercard", "Maestro" -> {
-                if (transferAmount in 300.0..75000.0) {
-                    return 0.0
+                return if (transferAmount in 300.0..75000.0) {
+                    0.0
                 } else {
-                    return 0.6 / 100 * transferAmount + 20.0
+                    0.6 / 100 * transferAmount + 20.0
                 }
             }
             "Visa", "Мир" -> {
-                val minCommission = 25.0 // Минимальная комиссия для Visa и Мир - 25 рублей
+                val minCommission = 35.0 // Минимальная комиссия для Visa и Мир - 25 рублей
                 val commissionPercentage = 0.75 / 100
 
                 val commission = transferAmount * commissionPercentage
