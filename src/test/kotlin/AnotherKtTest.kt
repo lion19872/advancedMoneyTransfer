@@ -55,7 +55,7 @@ class CommissionCalculatorTest {
     @Test
     fun testNoMonthlyLimitForUnknownCardType() {
         val commission = calculateCommission("American Express", 600000.0, 10000.0)
-        assertEquals(0.0, commission, "Commission should be calculated for unknown card types.")
+        assertEquals(10.0, commission, "Commission should be calculated for unknown card types.")
     }
 
     @Test
